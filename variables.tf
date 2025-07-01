@@ -66,3 +66,8 @@ variable "sns_email" {
   description = "Email for SNS notifications"
   type        = string
 }
+
+variable "ws_region" {
+  description = "The AWS region to deploy resources"
+  type        = string
+}
