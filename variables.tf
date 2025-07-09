@@ -45,6 +45,33 @@ variable "s3_bucket_name" {
   type        = string
 }
 
+variable "email_address" {
+  description = "Email address to receive Xcode version update notifications"
+  type        = string
+  
+  validation {
+    condition     = can(regex("^[^\\s@]+@[^\\s@]+\\.[^\\s@]+$", var.email_address))
+    error_message = "Must be a valid email address."
+  }
+}
+
+variable "sns_topic_name" {
+  description = "Name for the SNS topic"
+  type        = string
+  default     = "xcode-version-updates"
+  
+  validation {
+    condition     = can(regex("^[a-zA-Z0-9-_]+$", var.sns_topic_name))
+    error_message = "SNS topic name must contain only letters, numbers, hyphens, and underscores."
+  }
+}
+
+variable "ssm_parameter_name" {
+  description = "Name for the SSM parameter storing the current Xcode version"
+  type        = string
+  default     = "/xcode/latest_version"
+}
+
 variable "lambda_execution_role_arn" {
   type        = string
   description = "IAM role ARN for Lambda access"

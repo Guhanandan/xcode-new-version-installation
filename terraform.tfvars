@@ -14,3 +14,5 @@ lambda_function_name  = "xcode-lambda-function"
 mac_instance_name     = "xcode-mac-instance"
 key_pair_name         = ""
 sns_email            = ""
+email_address = "your-email@example.com"
+
