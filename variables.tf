@@ -45,6 +45,11 @@ variable "s3_bucket_name" {
   type        = string
 }
 
+variable "lambda_execution_role_arn" {
+  type        = string
+  description = "IAM role ARN for Lambda access"
+}
+
 variable "lambda_function_name" {
   description = "Lambda function name"
   type        = string
