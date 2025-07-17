@@ -75,6 +75,7 @@ variable "ssm_parameter_name" {
 variable "lambda_execution_role_arn" {
   type        = string
   description = "IAM role ARN for Lambda access"
+  sensitive   = true
 }
 
 variable "lambda_function_name" {
@@ -92,11 +93,13 @@ variable "mac_instance_name" {
 variable "key_pair_name" {
   description = "EC2 Key Pair name"
   type        = string
+  sensitive   = true
 }
 
 variable "sns_email" {
   description = "Email for SNS notifications"
   type        = string
+  sensitive   = true
 }
 
 variable "ws_region" {
