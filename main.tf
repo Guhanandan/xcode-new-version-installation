@@ -31,6 +31,25 @@ module "s3" {
   bucket_name  = var.s3_bucket_name
   environment  = var.environment
   project_name = var.project_name
+  lambda_execution_role_arn = var.lambda_execution_role_arn
+}
+
+# SSM Parameter for storing Xcode version
+module "ssm" {
+  source = "./modules/ssm"
+  
+  parameter_name = var.ssm_parameter_name
+  #tags = var.tags
+}
+
+
+# SNS Topic and Subscription
+module "sns" {
+  source = "./modules/sns"
+  
+  topic_name    = var.sns_topic_name
+  email_address = var.email_address
+  #tags = var.tags
 }
 
 # Lambda Module
@@ -44,6 +63,7 @@ module "lambda" {
   environment       = var.environment
   project_name      = var.project_name
 }
+
 
 # EC2 Mac Module
 module "ec2_mac" {
