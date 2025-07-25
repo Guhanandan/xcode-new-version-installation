@@ -11,6 +11,8 @@ The infrastructure consists of the following components:
 - **S3 Module**: Secure object storage bucket with encryption
 - **Lambda Module**: Serverless function with VPC integration
 - **CloudWatch Module**: Monitoring and alerting system
+- **SSM Module**: Systems Manager for secure parameter storage and instance management
+- **SNS Module**: Simple Notification Service for email alerts and notifications
 
 ## 📁 Project Structure
 
@@ -30,6 +32,14 @@ project/
     │   ├── main.tf             # S3 resources
     │   ├── variables.tf        # S3 variables
     │   └── outputs.tf          # S3 outputs
+    ├── ssm/
+    │   ├── main.tf             # ssm resources
+    │   ├── variables.tf        # ssm variables
+    │   └── outputs.tf          # ssm outputs
+    ├── sns/
+    │   ├── main.tf             # sns resources
+    │   ├── variables.tf        # sns variables
+    │   └── outputs.tf          # sns outputs
     ├── lambda/
     │   ├── main.tf             # Lambda resources
     │   ├── variables.tf        # Lambda variables
@@ -360,3 +370,63 @@ terraform destroy -target=module.ec2_mac
 ### Best Practices
 - [Terraform Best Practices](https://www.terraform-best-practices.com/)
 - [AWS Well-Architected Framework](https://aws.amazon.com/architecture/well-architected/)
+
+### AWS SSM & SNS Documentation
+- [AWS SSM Parameter Store](https://docs.aws.amazon.com/systems-manager/latest/userguide/systems-manager-parameter-store.html)
+- [AWS SNS Notifications](https://docs.aws.amazon.com/sns/latest/dg/welcome.html)
+
+---
+
+## 📦 Additional Module Details
+
+### SSM Module (`modules/ssm/`)
+Stores and manages secure parameters (e.g., Xcode version) for use by EC2, Lambda, or other services.
+**Inputs:**
+- `parameter_name` (string): Name of the SSM parameter (e.g., `/xcode/version`)
+- `tags` (optional): Resource tags
+**Outputs:**
+- Parameter name
+- Parameter value
+
+### SNS Module (`modules/sns/`)
+Creates an SNS topic and email subscription for notifications (e.g., Xcode version updates, alarms).
+**Inputs:**
+- `topic_name` (string): Name of the SNS topic
+- `email_address` (string): Email to subscribe for notifications
+- `tags` (optional): Resource tags
+**Outputs:**
+- Topic ARN
+- Subscription ARN
+
+### Example: Using Module Outputs
+You can reference outputs from modules in other modules or in your root outputs. For example:
+```hcl
+output "ec2_mac_instance_id" {
+  value = module.ec2_mac.instance_id
+}
+output "lambda_function_arn" {
+  value = module.lambda.function_arn
+}
+```
+
+## 🛠️ Advanced Usage
+
+- **Custom Tags:** Add custom tags to resources by passing a `tags` variable to modules.
+- **Remote State:** Use S3 backend for state management (see example above).
+- **CI/CD Integration:** Use `terraform plan` and `terraform apply` in your pipeline for automated deployments.
+- **Multiple Environments:** Use separate `.tfvars` files for dev, staging, and prod.
+
+## ❓ FAQ / Common Questions
+
+**Q: How do I update the Xcode version for EC2 Mac or Lambda?**
+A: Update the value in SSM Parameter Store (`ssm_parameter_name`) and re-apply Terraform.
+
+**Q: How do I receive email alerts for infrastructure changes?**
+A: Confirm your SNS email subscription and ensure CloudWatch alarms are configured to publish to the SNS topic.
+
+**Q: What if my Lambda function times out in the VPC?**
+A: Check NAT Gateway, security group, and route table configuration.
+
+**Q: How do I destroy only the EC2 Mac instance?**
+A: Run `terraform destroy -target=module.ec2_mac`.
+

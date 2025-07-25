@@ -1,4 +1,4 @@
-ws_region   = "us-west-2"
+aws_region   = "us-west-2"
 environment  = "dev"
 project_name = "xcode-new-version-update"
 
