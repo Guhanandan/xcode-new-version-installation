@@ -102,7 +102,28 @@ variable "sns_email" {
   sensitive   = true
 }
 
-variable "ws_region" {
-  description = "The AWS region to deploy resources"
+variable "lambda_function_name" {
+  description = "Name of the Lambda function"
   type        = string
 }
+
+variable "private_subnet_ids" {
+  description = "List of private subnet IDs for Lambda"
+  type        = list(string)
+}
+
+variable "public_subnet_ids" {
+  description = "List of public subnet IDs for Lambda"
+  type        = list(string)
+}
+
+variable "lambda_security_group_id" {
+  description = "Security group ID for Lambda function"
+  type        = string
+}
+
+variable "ec2_security_group_id" {
+  description = "Security group ID for EC2 instances"
+  type        = string
+}
+
